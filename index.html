@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es"> <!-- Define el idioma principal del documento como español -->
+
+<head>
+  <meta charset="UTF-8"> <!-- Codificación de caracteres en UTF-8 (soporta tildes, ñ, etc.) -->
+  <title>Star Wars: Battle of the Stars</title> <!-- Título que se muestra en la pestaña del navegador -->
+  <link rel="stylesheet" href="css/style.css"> <!-- Vincula la hoja de estilos CSS externa -->
+</head>
+
+<body>
+  <!-- ================== SECCIÓN INTRO ================== -->
+  <!-- Pantalla inicial tipo "intro" con fondo de estrellas y texto en estilo "crawl" -->
+  <section id="intro">
+    <canvas id="intro-canvas"></canvas> <!-- Canvas para dibujar las estrellas animadas de la intro -->
+    <div class="crawl"> <!-- Contenedor del texto que sube como en las películas de Star Wars -->
+      <h1>STAR WARS</h1> <!-- Título grande -->
+      <h2>Battle of the Stars</h2> <!-- Subtítulo -->
+      <p>Hace mucho tiempo, en una galaxia muy, muy lejana...</p>
+      <p>La resistencia Jedi ha lanzado su última nave para enfrentar la amenaza del Imperio Galáctico.</p>
+      <p>Sobrelleva la misión, esquiva a los TIE Fighters y recoge Holocrones para devolver el equilibrio a la Fuerza.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================== MENÚ PRINCIPAL ================== -->
+  <!-- Aquí aparece el menú con título, instrucciones y botón de iniciar -->
+  <section id="menu" class="hidden"> <!-- Se oculta al inicio (clase hidden) -->
+    <div class="menu-box"> <!-- Caja central con borde y estilo -->
+      <h1>⭐ STAR WARS ⭐</h1>
+      <h2>Battle of the Stars</h2>
+      <h3>📜 Instrucciones</h3>
+      <div id="instructions" class="instructions"> <!-- Texto de instrucciones -->
+        <p>🚀Usa las teclas ⬅️➡️ para mover tu X-Wing.</p>
+        <p>🚀Esquiva a los TIE Fighters (rebotan entre sí).</p>
+        <p>🚀Recoge Holocrones Jedi para ganar poder (boost azul).</p>
+        <p>🚀Cada nivel sube la velocidad y la cantidad de enemigos.</p>
+      </div>
+      </br>
+      <button id="startBtn">¡Comenzar!🎮</button> <!-- Botón que inicia el juego -->
+    </div>
+  </section>
+
+  <!-- ================== HUD (Heads-Up Display) ================== -->
+  <!-- Panel superior con la información de nivel, vidas y puntaje -->
+  <div id="hud" class="hidden"> <!-- HUD oculto hasta que inicie el juego -->
+    <div id="hud-box">
+      <span id="nivel">Nivel: 1</span> <!-- Muestra el nivel actual -->
+      <span id="vidas">Vidas: 5</span> <!-- Muestra las vidas restantes -->
+      <span id="score">Puntaje: 0</span> <!-- Muestra el puntaje -->
+      <button id="pauseBtn" class="pause-btn">⏸</button> <!-- Botón para pausar el juego -->
+    </div>
+  </div>
+
+  <!-- ================== CANVAS PRINCIPAL ================== -->
+  <!-- Aquí se dibuja el juego en sí (naves, enemigos, estrellas, powerups) -->
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- ================== OVERLAYS Y POPUPS ================== -->
+  <!-- Overlay general para mostrar mensajes (nivel superado, victoria, game over, etc.) -->
+  <div id="overlay" class="hidden"></div>
+
+  <!-- Popup especial para la pausa (aparece al presionar pausa) -->
+  <div id="pausePopup" class="popup hidden">
+    <p>⏸ Juego en pausa</p>
+    <button id="continueBtn">Continuar</button> <!-- Botón para seguir jugando -->
+    <button id="quitBtn">Salir</button> <!-- Botón para salir al menú principal -->
+  </div>
+
+  <!-- ================== FOOTER ================== -->
+  <!-- Pie de página fijo con créditos -->
+  <footer>© 2025 Star Wars: Battle of the Stars | Desarrollado por Paola Ortiz</footer>
+
+  <!-- ================== SCRIPT PRINCIPAL ================== -->
+  <!-- Se carga el archivo JS que contiene toda la lógica del juego -->
+  <script src="js/game.js"></script>
+</body>
+
+</html>

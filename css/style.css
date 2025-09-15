@@ -1,0 +1,268 @@
+/* ===== General ===== */
+body {
+  margin: 0;                     /* elimina márgenes por defecto */
+  background: black;              /* color de fondo negro */
+  color: yellow;                  /* color de texto principal en amarillo */
+  font-family: Arial, sans-serif; /* fuente general de la página */
+  overflow: hidden;               /* oculta barras de scroll (todo fijo en pantalla) */
+  text-align: center;             /* centra el texto por defecto */
+}
+
+/* ===== Intro ===== */
+#intro {
+  position: absolute;  /* lo posiciona de forma absoluta sobre toda la ventana */
+  width: 100%;         /* ocupa todo el ancho de la ventana */
+  height: 100%;        /* ocupa todo el alto de la ventana */
+  overflow: hidden;    /* oculta contenido que se desborde */
+  background: black;   /* fondo negro */
+}
+
+#intro-canvas {
+  position: absolute;  /* canvas ocupa todo el espacio del #intro */
+  width: 100%;
+  height: 100%;
+}
+
+.crawl {
+  position: absolute;             /* posición absoluta dentro de la intro */
+  bottom: -100%;                  /* empieza por debajo de la pantalla */
+  width: 100%;                    /* ocupa todo el ancho */
+  color: #ffe81f;                 /* color amarillo tipo Star Wars */
+  font-size: 24px;                /* tamaño base del texto */
+  text-align: center;             /* centra el texto */
+  transform-origin: 50% 100%;     /* define el punto de origen para transformaciones (centro inferior) */
+  animation: crawl 10s linear forwards; /* aplica animación tipo "crawl" por 10s */
+}
+
+.crawl h1 {
+  font-size: 48px; /* título principal grande */
+  margin: 0;       /* elimina márgenes */
+}
+.crawl h2 {
+  font-size: 28px; /* subtítulo más pequeño */
+  margin: 10px 0;  /* margen arriba y abajo */
+}
+
+/* Animación para el "crawl" estilo Star Wars */
+@keyframes crawl {
+  0%   { bottom: -60%; transform: rotateX(25deg) translateZ(0); }
+  100% { bottom: 100%;  transform: rotateX(25deg) translateZ(-1000px); }
+}
+
+/* ===== Menú ===== */
+.hidden { display: none; } /* clase para ocultar elementos */
+
+.menu-box {
+  border: 3px solid yellow;        /* borde amarillo */
+  box-shadow: 0 0 20px yellow;     /* brillo amarillo alrededor */
+  border-radius: 15px;             /* esquinas redondeadas */
+  padding: 20px;                   /* espacio interno */
+  margin: 100px auto;              /* margen superior e inferior, centrado horizontal */
+  width: 50%;                      /* ocupa la mitad del ancho */
+  background: rgba(0,0,0,0.7);     /* fondo negro semi-transparente */
+}
+
+#gameCanvas {
+  position: fixed;    /* canvas fijo en pantalla */
+  top: 0;
+  left: 0;
+  width: 100vw;       /* ocupa todo el ancho de la ventana */
+  height: 100vh;      /* ocupa todo el alto de la ventana */
+  z-index: -1;        /* se manda al fondo */
+  background: black;  /* asegura fondo negro */
+}
+
+/* ===== Botones ===== */
+button {
+  background: #0011ff;                             /* azul oscuro de fondo */
+  color: white;                                    /* texto blanco */
+  padding: 10px 20px;                              /* espacio interno */
+  border: 2px solid #00f6ff;                       /* borde azul neón */
+  border-radius: 10px;                             /* esquinas redondeadas */
+  cursor: pointer;                                 /* cursor tipo "mano" */
+  font-size: 18px;                                 /* tamaño de texto */
+  box-shadow: 0 0 15px #00f6ff, 0 0 25px #00cfff inset; /* efecto de brillo interno y externo */
+  transition: all 0.2s ease-in-out;                /* transición suave en hover */
+}
+button:hover {
+  background: #0000aa;                             /* cambia fondo a azul más oscuro */
+  box-shadow: 0 0 25px #00f6ff, 0 0 35px #00cfff inset; /* aumenta brillo */
+}
+
+/* Botones de Game Over dentro del overlay */
+#overlay button {
+  margin: 10px;            /* separación entre botones */
+  font-size: 20px;         /* texto un poco más grande */
+  padding: 12px 24px;      /* botones más grandes */
+}
+
+/* ===== HUD ===== */
+#hud {
+  position: absolute;                         /* posición absoluta en pantalla */
+  top: 15px;                                  /* 15px desde arriba */
+  left: 50%;                                  /* centrado horizontal */
+  transform: translateX(-50%);                /* corrige para centrar exactamente */
+  display: flex;                              /* usa flexbox para alinear elementos */
+  gap: 30px;                                  /* espacio entre elementos */
+  border: 2px solid yellow;                   /* borde amarillo */
+  padding: 8px 25px;                          /* espacio interno */
+  border-radius: 15px;                        /* esquinas redondeadas */
+  box-shadow: 0 0 15px yellow;                /* brillo amarillo */
+  background: rgba(0,0,0,0.6);                /* fondo negro semi-transparente */
+  color: #ff0;                                /* texto amarillo (sobrescrito abajo) */
+  font-weight: bold;                          /* texto en negritas */
+  font-size: 18px;                            /* tamaño de texto */
+  font-family: 'Orbitron', sans-serif;        /* fuente futurista */
+  color: #00f7ff;                             /* azul neón (sobrescribe amarillo anterior) */
+  text-shadow: 0 0 5px #00f7ff,
+               0 0 10px #00f7ff,
+               0 0 20px #00aaff;              /* efecto brillante en el texto */
+}
+
+/* HUD oculto (cuando lleva la clase .hidden) */
+#hud.hidden {
+  display: none;
+}
+
+.pause-btn {
+  font-size: 22px;               /* tamaño del icono de pausa/play */
+  padding: 8px 12px;             /* espacio interno */
+  border: none;                  /* sin borde */
+  border-radius: 10px;           /* esquinas redondeadas */
+  background: #00aaff;           /* fondo azul */
+  color: whitesmoke;             /* texto claro */
+  cursor: pointer;               /* cursor de mano */
+  box-shadow: 0 0 12px #00aaff;  /* brillo alrededor */
+}
+
+/* Overlay con efecto zoom */
+#overlay {
+  position: absolute;                            /* centrado en pantalla */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.5);   /* aparece con escala pequeña */
+  background: black;                             /* fondo negro */
+  border: 3px solid yellow;                      /* borde amarillo */
+  box-shadow: 0 0 20px yellow;                   /* brillo amarillo */
+  border-radius: 15px;                           /* esquinas redondeadas */
+  padding: 20px;                                 /* espacio interno */
+  color: white;                                  /* texto blanco */
+  font-size: 24px;                               /* texto grande */
+  min-width: 300px;                              /* ancho mínimo */
+  animation: zoomIn 0.5s forwards;               /* animación de zoom */
+}
+
+@keyframes zoomIn {
+  to { transform: translate(-50%, -50%) scale(1); } /* al final llega a escala normal */
+}
+
+/* PowerUps con animación de flash al recogerlos */
+.powerup-hit {
+  animation: flash 0.2s alternate 3; /* alterna brillo por 3 repeticiones */
+}
+
+@keyframes flash {
+  from { filter: brightness(3); }  /* súper brillante */
+  to { filter: brightness(1); }    /* vuelve a brillo normal */
+}
+
+/* Popup de pausa */
+#pausePopup {
+  position: fixed;                          /* se queda fijo en la ventana */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);         /* centrado exacto */
+  background: rgba(0, 0, 0, 0.9);           /* fondo negro semi-opaco */
+  border: 3px solid #ff0;                   /* borde amarillo */
+  padding: 20px 40px;                       /* espacio interno */
+  border-radius: 12px;                      /* esquinas redondeadas */
+  box-shadow: 0 0 25px #ff0;                /* brillo amarillo */
+  text-align: center;                       /* texto centrado */
+  color: #0ff;                              /* texto azul neón */
+  font-family: 'Orbitron', sans-serif;      /* fuente futurista */
+  z-index: 2000;                            /* por encima de todo */
+}
+
+#pausePopup p {
+  font-size: 22px;        /* tamaño del texto */
+  margin-bottom: 20px;    /* separación hacia abajo */
+}
+
+#pausePopup button {
+  background: black;                /* fondo negro */
+  border: 2px solid #0ff;           /* borde azul neón */
+  color: #0ff;                      /* texto azul */
+  padding: 8px 16px;                /* espacio interno */
+  margin: 8px;                      /* separación entre botones */
+  border-radius: 8px;               /* esquinas redondeadas */
+  font-size: 16px;                  /* tamaño texto */
+  cursor: pointer;                  /* cursor tipo mano */
+  font-family: 'Orbitron', sans-serif; /* fuente futurista */
+  transition: all 0.3s;             /* animación suave */
+}
+
+#pausePopup button:hover {
+  background: #0ff;                 /* fondo se vuelve azul */
+  color: black;                     /* texto negro */
+  box-shadow: 0 0 15px #0ff;        /* efecto de brillo */
+}
+
+/* ===== Instrucciones ===== */
+.instructions {
+  text-align: center;               /* centra texto */
+  margin-top: 15px;                 /* espacio arriba */
+  font-size: 16px;                  /* tamaño del texto */
+  line-height: 1.5;                 /* interlineado */
+  color: #fff;                      /* texto blanco */
+  animation: fadeIn 2s ease-in-out; /* aparece suavemente */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); } /* empieza abajo y transparente */
+  to { opacity: 1; transform: translateY(0); }     /* termina arriba y visible */
+}
+
+/* ===== Overlay (cintillo) ===== */
+#overlay {
+  position: absolute;               /* centrado */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: black;                /* fondo negro */
+  border: 3px solid yellow;         /* borde amarillo */
+  box-shadow: 0 0 20px yellow;      /* brillo */
+  border-radius: 15px;              /* esquinas redondeadas */
+  padding: 20px;                    /* espacio interno */
+  color: white;                     /* texto blanco */
+  font-size: 22px;                  /* tamaño de texto */
+  min-width: 300px;                 /* ancho mínimo */
+}
+
+/* ===== Footer ===== */
+footer {
+  position: fixed;                  /* siempre visible abajo */
+  bottom: 0;
+  width: 100%;                      /* ocupa todo el ancho */
+  text-align: center;               /* texto centrado */
+  color: yellow;                    /* texto amarillo */
+  border-top: 2px solid yellow;     /* línea amarilla arriba */
+  padding: 5px;                     /* espacio interno */
+}
+
+/* Canvas de la intro debe ocupar toda la pantalla */
+#intro-canvas {
+  position: absolute; /* cubre toda el área */
+  top: 0;
+  left: 0;
+  width: 100vw;       /* 100% del ancho de la ventana */
+  height: 100vh;      /* 100% del alto de la ventana */
+  display: block;     /* se asegura que sea visible como bloque */
+  z-index: 0;         /* detrás del texto */
+  background: black;  /* fondo negro por si faltan píxeles */
+}
+
+/* El texto del crawl debe estar encima */
+#intro .crawl {
+  position: relative; /* relativo a intro */
+  z-index: 1;         /* por encima del canvas */
+}
