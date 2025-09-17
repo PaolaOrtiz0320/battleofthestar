@@ -46,22 +46,37 @@ function playSound(baseSound) {
   clone.play();
 }
 
-// ====== Genera estrellas iniciales ======
+/* ============================================================
+   PROYECTO: STARSHIP SURVIVOR
+   BLOQUE DOCUMENTADO: ESTRELLAS, NAVE, ENEMIGOS, POWERUPS, EXPLOSIONES
+   ============================================================ */
+
+/* ============================================================
+   🌌 1) GENERACIÓN Y DIBUJO DE ESTRELLAS
+   ============================================================ */
+
+// Generamos 150 estrellas con posiciones, tamaños y velocidades aleatorias
 for (let i = 0; i < 150; i++) {
   estrellas.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    size: Math.random() * 2,
-    speed: 0.3 + Math.random() * 0.7
+    x: Math.random() * canvas.width,   // posición X dentro del ancho del canvas
+    y: Math.random() * canvas.height,  // posición Y dentro del alto del canvas
+    size: Math.random() * 2,           // tamaño de la estrella (0–2 px)
+    speed: 0.3 + Math.random() * 0.7   // velocidad entre 0.3–1 px/frame
   });
 }
+
+// Dibuja las estrellas y las mueve hacia abajo
 function drawStars() {
-  ctx.fillStyle = "white";
+  ctx.fillStyle = "white"; // color de las estrellas
   estrellas.forEach(s => {
     ctx.beginPath();
-    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2); // estrella = círculo pequeño
     ctx.fill();
+
+    // Movimiento hacia abajo
     s.y += s.speed;
+
+    // Si sale por abajo → reaparece arriba con nueva posición X
     if (s.y > canvas.height) {
       s.y = 0;
       s.x = Math.random() * canvas.width;
@@ -69,20 +84,25 @@ function drawStars() {
   });
 }
 
-// ===================== CLASES =====================
+/* ============================================================
+   🚀 2) CLASE NAVE
+   ============================================================ */
 class Nave {
   constructor() {
-    this.width = 70; this.height = 90;
-    this.x = canvas.width / 2;
-    this.y = canvas.height - 100;
-    this.speed = 12;
+    this.width = 70; this.height = 90;      // tamaño de la nave
+    this.x = canvas.width / 2;              // posición inicial centrada
+    this.y = canvas.height - 100;           // posición inicial cerca del fondo
+    this.speed = 12;                        // velocidad base
   }
+
   draw() {
     ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(Math.PI);
+    ctx.translate(this.x, this.y);          // mover sistema de coordenadas
+    ctx.rotate(Math.PI);                    // rotar sprite (180°)
     ctx.drawImage(naveImg, -this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
+
+    // 🔹 Si está activo el boost (por comer holocrón), dibuja rastro azul
     if (boostActive) {
       const grad = ctx.createLinearGradient(this.x, this.y, this.x, this.y + 80);
       grad.addColorStop(0, "rgba(0,204,255,0.7)");
@@ -96,96 +116,129 @@ class Nave {
       ctx.fill();
     }
   }
+
   move(dir) {
-    // 🔹 Boost más intenso (afecta a la nave) y movimiento arriba/abajo más rápido
+    // Si hay boost, la nave se mueve 4× más rápido
     let currentSpeed = boostActive ? this.speed * 4 : this.speed;
+
+    // Movimiento limitado para que no salga del canvas
     if (dir === "left" && this.x > 40) this.x -= currentSpeed;
     if (dir === "right" && this.x < canvas.width - 40) this.x += currentSpeed;
-    if (dir === "up" && this.y > 60) this.y -= currentSpeed * 1.3;
+    if (dir === "up" && this.y > 60) this.y -= currentSpeed * 1.3;   // 30% más rápido vertical
     if (dir === "down" && this.y < canvas.height - 60) this.y += currentSpeed * 1.3;
   }
 }
 
+/* ============================================================
+   👾 3) CLASE ENEMIGO
+   ============================================================ */
 class Enemigo {
   constructor() {
     this.width = 50; this.height = 50;
-    this.x = Math.random() * (canvas.width - this.width);
-    this.y = -this.height;
-    this.speed = 1.5 + nivel * 0.3;
-    // velocidad inicial horizontal/vertical
+    this.x = Math.random() * (canvas.width - this.width); // posición X inicial
+    this.y = -this.height;                               // aparece fuera de pantalla
+    this.speed = 1.5 + nivel * 0.3;                      // más rápido con cada nivel
+
+    // Dirección inicial aleatoria en X (izquierda o derecha)
     this.dx = (Math.random() < 0.5 ? -1 : 1) * this.speed;
-    this.dy = this.speed;
-    this.hit = false;
+    this.dy = this.speed; // movimiento hacia abajo
+    this.hit = false;     // indicador de choque
     this.hitColor = "red";
   }
+
   draw() {
-    ctx.shadowColor = this.hit ? this.hitColor : "red";
+    ctx.shadowColor = this.hit ? this.hitColor : "red"; // brillo si fue golpeado
     ctx.shadowBlur = this.hit ? 40 : 20;
     ctx.drawImage(enemigoImg, this.x, this.y, this.width, this.height);
     ctx.shadowBlur = 0;
   }
+
   update() {
-    this.x += this.dx; 
+    this.x += this.dx;
     this.y += this.dy;
 
-    // Rebote en paredes laterales
+    // Rebote en las paredes laterales
     if (this.x < 0) { this.x = 0; this.dx *= -1; }
-    if (this.x + this.width > canvas.width) { this.x = canvas.width - this.width; this.dx *= -1; }
+    if (this.x + this.width > canvas.width) {
+      this.x = canvas.width - this.width;
+      this.dx *= -1;
+    }
 
-    // Borrar si sale por abajo (fuera de pantalla)
+    // Si sale por abajo → se marca para eliminar
     if (this.y > canvas.height) this.remove = true;
 
     this.draw();
   }
+
   hitEffect(color = "white") {
     this.hit = true;
-    this.hitColor = color;
-    setTimeout(() => { this.hit = false; }, 200);
+    this.hitColor = color;         // cambia color temporalmente
+    setTimeout(() => { this.hit = false; }, 200); // vuelve a normal en 200ms
   }
 }
 
+/* ============================================================
+   🔮 4) CLASE POWERUP (HOLOCRÓN)
+   ============================================================ */
 class PowerUp {
   constructor() {
     this.width = 35; this.height = 35;
-    this.x = Math.random() * (canvas.width - this.width);
-    this.y = -this.height; this.speed = 2;
-    this.hit = false;
+    this.x = Math.random() * (canvas.width - this.width); // posición X aleatoria
+    this.y = -this.height;                               // aparece arriba
+    this.speed = 2;                                      // velocidad constante
+    this.hit = false;                                    // indicador de recogido
   }
+
   draw() {
-    ctx.shadowColor = this.hit ? "cyan" : "blue";
+    ctx.shadowColor = this.hit ? "cyan" : "blue";  // cambia color al recogerse
     ctx.shadowBlur = this.hit ? 40 : 15;
     ctx.drawImage(powerupImg, this.x, this.y, this.width, this.height);
     ctx.shadowBlur = 0;
   }
+
   update() { this.y += this.speed; this.draw(); }
+
   hitEffect() {
-    this.hit = true;
+    this.hit = true;                       // parpadeo breve
     setTimeout(() => { this.hit = false; }, 200);
   }
 }
 
+/* ============================================================
+   💥 5) CLASE EXPLOSION
+   ============================================================ */
 class Explosion {
   constructor(x, y, color1 = "yellow", color2 = "orange", color3 = "red") {
-    this.x = x; this.y = y;
-    this.radius = 10;
-    this.alpha = 1;
+    this.x = x; this.y = y;       // posición de la explosión
+    this.radius = 10;             // radio inicial
+    this.alpha = 1;               // opacidad inicial (visible)
     this.color1 = color1; this.color2 = color2; this.color3 = color3;
   }
-  update() { this.radius += 5; this.alpha -= 0.08; }
+
+  update() {
+    this.radius += 5;   // cada frame aumenta el radio
+    this.alpha -= 0.08; // se va volviendo transparente
+  }
+
   draw() {
     ctx.save();
-    ctx.globalAlpha = this.alpha;
-    const grad = ctx.createRadialGradient(this.x, this.y, this.radius * 0.2, this.x, this.y, this.radius);
+    ctx.globalAlpha = this.alpha; // opacidad actual
+    const grad = ctx.createRadialGradient(
+      this.x, this.y, this.radius * 0.2,  // inicio degradado
+      this.x, this.y, this.radius         // fin degradado
+    );
     grad.addColorStop(0, this.color1);
     grad.addColorStop(0.3, this.color2);
     grad.addColorStop(1, this.color3);
+
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
-  finished() { return this.alpha <= 0; }
+
+  finished() { return this.alpha <= 0; } // desaparece cuando alpha = 0
 }
 
 // ===================== COLISIONES =====================
