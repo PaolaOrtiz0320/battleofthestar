@@ -102,6 +102,28 @@ body {
   display: none;
 }
 
+
+
+@media (max-width: 768px) {
+  .menu-box {
+    width: 90%;       /* en móviles ocupa casi toda la pantalla */
+    margin: 40px auto;
+    font-size: 14px;  /* texto más pequeño */
+  }
+
+  #hud {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  #hud span, #hud button {
+    font-size: 14px;
+  }
+}
+
+
 .pause-btn {
   font-size: 22px;               /* tamaño del icono de pausa/play */
   padding: 8px 12px;             /* espacio interno */
