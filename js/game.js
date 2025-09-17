@@ -1,3 +1,48 @@
+/* 
+============================================
+ VIDEOJUEGO STAR WARS - DOCUMENTACIÓN
+============================================
+
+1. CONTEXTO
+------------
+Este videojuego está inspirado en el universo de Star Wars y 
+se desarrolla en un entorno espacial con HTML5 Canvas y JavaScript.
+El jugador controla una nave espacial que se desplaza en un fondo
+de estrellas en movimiento, enfrentando obstáculos y enemigos.
+
+2. OBJETIVO
+------------
+- General: Crear un videojuego interactivo que simule la experiencia
+  de pilotar una nave en el espacio.
+- Específicos:
+  * Implementar movimiento de nave con teclas.
+  * Generar un fondo dinámico con estrellas.
+  * Integrar enemigos y disparos.
+  * Practicar programación gráfica con Canvas y animaciones.
+
+3. JUSTIFICACIÓN
+-----------------
+El proyecto es relevante porque:
+- Refuerza el aprendizaje en JavaScript con canvas y ciclos de animación.
+- Promueve la creatividad y la lógica de programación orientada a objetos.
+- Sirve como prototipo para desarrollos más complejos.
+- Vincula la programación con un tema atractivo como Star Wars.
+
+4. OPERACIÓN DEL VIDEOJUEGO
+-----------------------------
+- Inicio:
+  El usuario abre el juego en el navegador y se genera el fondo estrellado.
+- Controles:
+  Flechas → Mueven la nave.
+  Espacio → Dispara proyectiles.
+- Dinámica:
+  Las estrellas se desplazan hacia abajo simulando el espacio.
+  Enemigos descienden desde la parte superior.
+- Final:
+  El juego termina al colisionar con un enemigo o perder todas las vidas.
+============================================
+*/
+
 // ====== Obtiene el elemento <canvas> del DOM por su id ======
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
